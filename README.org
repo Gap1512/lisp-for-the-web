@@ -16,18 +16,18 @@
 
 ** The Brothers are History
 
-O trabalho a seguir mostra o processo de implementaÁ„o de um website, o qual lista alguns jogos
-e permite que o usu·rio vote em suas preferÍncias.
+O trabalho a seguir mostra o processo de implementa√ß√£o de um website, o qual lista alguns jogos
+e permite que o usu√°rio vote em suas prefer√™ncias.
 
 ** Definindo pacotes e sistemas
 
-Ao invÈs de entrar com comandos no toplevel, define-se pacotes.
-Como o projeto a seguir se utilizar· de pacotes externos, os mesmos
-precisam ser carregados antes do arquivo em quest„o. Para isso, cria-se trÍs arquivos:
+Ao inv√©s de entrar com comandos no toplevel, define-se pacotes.
+Como o projeto a seguir se utilizar√° de pacotes externos, os mesmos
+precisam ser carregados antes do arquivo em quest√£o. Para isso, cria-se tr√™s arquivos:
 Um ``package.lisp", outro ``filename.lisp", e por fim ``filenam.asd", sendo filename o nome desejado
 para o pacote.
 
-Em ``filename.asd", que no caso ser· chamado de ``retro-games.asd", coloca-se:
+Em ``filename.asd", que no caso ser√° chamado de ``retro-games.asd", coloca-se:
 
 #+HEADER: :exports code :tangle "retro-games.asd"
 #+BEGIN_SRC lisp
@@ -49,17 +49,17 @@ Em ``package.lisp", coloca-se:
 #+END_SRC
 
 
-Finalmente, o cÛdigo em quest„o ser· escrito no arquivo ``retro-games.lisp",
-o qual deve se iniciar com:
+Finalmente, o c√≥digo em quest√£o ser√° escrito no arquivo ``retro-games.lisp",
+que deve se iniciar com:
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp 
 (in-package :retro-games)
 #+END_SRC
 
-Para que as definiÁıes sejam armazenadas no pacote ``retro-games".
+Para que as defini√ß√µes sejam armazenadas no pacote ``retro-games".
 
-ApÛs feita a definiÁ„o destes trÍs arquivos, o pacote pode ser carregado para
+Ap√≥s feita a defini√ß√£o destes tr√™s arquivos, o pacote pode ser carregado para
 o toplevel utilizando o Quicklisp, da seguinte forma:
 
 #+HEADER: :exports code
@@ -67,13 +67,13 @@ o toplevel utilizando o Quicklisp, da seguinte forma:
   (ql:quickload 'retro-games)
 #+END_SRC
 
-O Quicklisp ir· carregar e, se necess·rio, instalar, as dependÍncias do pacote, desde
-que o diretÛrio onde o projeto se encontra esteja no escopo de busca do ASDF.
-Por garantia, È recomendado criar projetos dentro da pasta local-projects, do 
-quicklisp. Caso queira que a busca seja feita em outro diretÛrio, verificar
+O Quicklisp ir√° carregar e, se necess√°rio, instalar, as depend√™ncias do pacote, desde
+que o diret√≥rio onde o projeto se encontra esteja no escopo de busca do ASDF.
+Por garantia, √© recomendado criar projetos dentro da pasta local-projects, do 
+quicklisp. Caso queira que a busca seja feita em outro diret√≥rio, verificar
 [[https://common-lisp.net/project/asdf/asdf/Configuring-ASDF-to-find-your-systems.html][este tutorial]].
 
-Depois do carregamento, deve-se mudar o toplevel para acessar o pacote em quest„o.
+Depois do carregamento, deve-se mudar o toplevel para acessar o pacote em quest√£o.
 Para isso, entra-se com o seguinte comando no REPL.
 
 #+HEADER: :exports code
@@ -83,7 +83,7 @@ Para isso, entra-se com o seguinte comando no REPL.
 
 ** Representando jogos como objetos
 
-Para representar um jogo, o qual ser· avaliado pelo usu·rio do site,
+Para representar um jogo, o qual ser√° avaliado pelo usu√°rio do site,
 optou-se por utilizar o sistema de objetos do Lisp.
 
 #+HEADER: :exports code
@@ -95,8 +95,8 @@ optou-se por utilizar o sistema de objetos do Lisp.
 	      :initform 0)))
 #+END_SRC
 
-Desta forma, um jogo È composto por dois atributos: Name e Votes. Para instanciar
-um objeto dessa classe, utiliza-se a funÁ„o:
+Desta forma, um jogo √© composto por dois atributos: Name e Votes. Para instanciar
+um objeto dessa classe, utiliza-se a fun√ß√£o:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -106,7 +106,7 @@ um objeto dessa classe, utiliza-se a funÁ„o:
 #+RESULTS:
 : MANY-LOST-HOURS
 
-Os acessores dos atributos s„o definidos intrinsicamente pela linguagem,
+Os acessores dos atributos s√£o definidos intrinsicamente pela linguagem,
 ao utilizar reader para leitura e accessor para leitura e escrita.
 
 #+HEADER: :exports code
@@ -117,8 +117,8 @@ ao utilizar reader para leitura e accessor para leitura e escrita.
 #+RESULTS:
 : 0
 
-Definindo um mÈtodo que acessa o atributo de determinado objeto e incrementa 
-o n˙mero de votos È simples:
+Definindo um m√©todo que acessa o atributo de determinado objeto e incrementa 
+o n√∫mero de votos √© simples:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -129,19 +129,19 @@ o n˙mero de votos È simples:
 #+RESULTS:
 : #<STANDARD-METHOD RETRO-GAMES::VOTE-FOR (T) {262CC8D9}>
 
-** Um protÛtipo de backend
+** Um prot√≥tipo de backend
 
-Inicialmente, o backend ser· definido como uma lista armazenada em memÛria. Optou-se por esta representaÁ„o visto que a linguagem permite facilmente
-modificaÁıes em suas aplicaÁıes.
+Inicialmente, o backend ser√° definido como uma lista armazenada em mem√≥ria. Optou-se por esta representa√ß√£o visto que a linguagem permite facilmente
+modifica√ß√µes em suas aplica√ß√µes.
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
   (defvar *games* nil)
 #+END_SRC
 
-Defvar inicializa uma vari·vel especial, no caso *games*. O * serve para padronizar
-os nomes de vari·veis globais. O acesso a *games* È, em seguida, encapsulado a
-algumas funÁıes.
+Defvar inicializa uma vari√°vel especial, no caso *games*. O * serve para padronizar
+os nomes de vari√°veis globais. O acesso a *games* √©, em seguida, encapsulado a
+algumas fun√ß√µes.
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -150,11 +150,11 @@ algumas funÁıes.
 	  :key #'name))
 #+END_SRC
 
-Tal funÁ„o, escrita em torno de find, procura um item em uma sequÍncia. 
-Test representa a funÁ„o de comparaÁ„o entre o elemento em cheque e o item,
-enquanto key indica qual funÁ„o ser· aplicada aos elementos, antes da comparaÁ„o.
-Como find retorna nil (falso) quando o item n„o È encontrado, pode-se abstrair
-uma nova funÁ„o, para verificar se um item j· est· armazenado.
+Tal fun√ß√£o, escrita em torno de find, procura um item em uma sequ√™ncia. 
+Test representa a fun√ß√£o de compara√ß√£o entre o elemento em cheque e o item,
+enquanto key indica qual fun√ß√£o ser√° aplicada aos elementos, antes da compara√ß√£o.
+Como find retorna nil (falso) quando o item n√£o √© encontrado, pode-se abstrair
+uma nova fun√ß√£o, para verificar se um item j√° est√° armazenado.
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -162,10 +162,10 @@ uma nova funÁ„o, para verificar se um item j· est· armazenado.
     (game-from-name game-name))
 #+END_SRC
 
-Para exibir os itens em ordem de popularidade, lisp fornece sort, uma funÁ„o que
-ordena uma sequÍncia. Entretanto, sort È destrutiva. Portanto, modifica seus 
-argumentos e, consequentemente, *games*. Para que a vari·vel seja preservada,
-a mesma È copiada antes de ser avaliada.
+Para exibir os itens em ordem de popularidade, lisp fornece sort, uma fun√ß√£o que
+ordena uma sequ√™ncia. Entretanto, sort √© destrutiva. Portanto, modifica seus 
+argumentos e, consequentemente, *games*. Para que a vari√°vel seja preservada,
+a mesma √© copiada antes de ser avaliada.
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -176,7 +176,7 @@ a mesma È copiada antes de ser avaliada.
 #+RESULTS:
 : GAMES
 
-Finalmente, implementa-se uma funÁ„o para adicionar novos jogos ‡ lista.
+Finalmente, implementa-se uma fun√ß√£o para adicionar novos jogos √† lista.
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -185,10 +185,10 @@ Finalmente, implementa-se uma funÁ„o para adicionar novos jogos ‡ lista.
       (push (make-instance 'game :name name) *games*)))
 #+END_SRC
 
-** Customizando a representaÁ„o de impress„o de objetos
+** Customizando a representa√ß√£o de impress√£o de objetos
 
-… possÌvel definir uma forma de impress„o para os objetos da classe,
-especializando a funÁ„o genÈrica print-object da classe game, da forma:
+√â poss√≠vel definir uma forma de impress√£o para os objetos da classe,
+especializando a fun√ß√£o gen√©rica print-object da classe game, da forma:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -201,16 +201,16 @@ especializando a funÁ„o genÈrica print-object da classe game, da forma:
 #+RESULTS:
 : #<STANDARD-METHOD COMMON-LISP:PRINT-OBJECT (GAME T) {251DFFD9}>
 
-Print-unreadable-object recebe um objeto, uma stream e alguns par‚metros adicionais,
-alÈm de um corpo. Tal funÁ„o imprime o corpo dentro de ``#<" e ``>". Caso type
-seja true, adiciona a classe do objeto ao comeÁo da frase.
+Print-unreadable-object recebe um objeto, uma stream e alguns par√¢metros adicionais,
+al√©m de um corpo. Tal fun√ß√£o imprime o corpo dentro de ``#<" e ``>". Caso type
+seja true, adiciona a classe do objeto ao come√ßo da frase.
 With-slots evita que o objeto seja acessado duas vezes, para buscar cada atributo. 
 
 * Entering the Web
 ** Generating HTML dynamically
 
-Primeiramente, quando deseja-se criar uma linguagem embutida a um domÌnio 
-especÌfico, procura-se uma representaÁ„o de tal linguagem em Lisp. Para HTML,
+Primeiramente, quando deseja-se criar uma linguagem embutida a um dom√≠nio 
+espec√≠fico, procura-se uma representa√ß√£o de tal linguagem em Lisp. Para HTML,
 pode-se utilizar o pacote CL-WHO.
 
 #+HEADER: :exports both
@@ -222,7 +222,7 @@ pode-se utilizar o pacote CL-WHO.
      (:head
       (:title "Test page"))
      (:body
-      (:p "CL-WHO È f·cil de usar"))))
+      (:p "CL-WHO √© f√°cil de usar"))))
 #+END_SRC
 
 #+RESULTS:
@@ -235,33 +235,33 @@ pode-se utilizar o pacote CL-WHO.
     </title>
   </head>
   <body>
-    <p>CL-WHO È f·cil de usar
+    <p>CL-WHO √© f√°cil de usar
     </p>
   </body>
 </html>
 #+end_example
 
-O primeiro comando especifica a utilizaÁ„o do HTML5. AlÈm disso, para que o
-Doctype apareÁa no documento, requisita-se o prologue. Outra vantagem do 
-CL-WHO È que o mesmo permite que expressıes Lisp sejam avaliadas no corpo, possibilitando
-a criaÁ„o de p·ginas din‚micas.
+O primeiro comando especifica a utiliza√ß√£o do HTML5. Al√©m disso, para que o
+Doctype apare√ßa no documento, requisita-se o prologue. Outra vantagem do 
+CL-WHO √© que o mesmo permite que express√µes Lisp sejam avaliadas no corpo, possibilitando
+a cria√ß√£o de p√°ginas din√¢micas.
 
-** Macros: Evitando duplicidade de cÛdigo
+** Macros: Evitando duplicidade de c√≥digo
 
 Mesmo que o CL-WHO apresente uma forma mais sucinta que o HTML puro, 
-repetiÁıes se fazem presentes. Estas repetiÁıes comeÁam a ficar mais evidentes 
-quando a complexidade do sistema aumenta. Uma forma de representar abstraÁıes em
-Lisp È por meio de macros. Esta funcionalidade permite que cÛdigo seja gerado em
-tempo de compilaÁ„o. O funcionamento È de certa forma semelhante ‡s funÁıes, 
-com a diferenÁa que as macros utilizam como estruturas de dados, o prÛprio cÛdigo.
-Desta forma, as macros atenuam a linha entre tempo de compilaÁ„o e execuÁ„o, visto
-que durante a expans„o do cÛdigo da macro, toda a linguagem est· a disposiÁ„o.
+repeti√ß√µes se fazem presentes. Estas repeti√ß√µes come√ßam a ficar mais evidentes 
+quando a complexidade do sistema aumenta. Uma forma de representar abstra√ß√µes em
+Lisp √© por meio de macros. Esta funcionalidade permite que c√≥digo seja gerado em
+tempo de compila√ß√£o. O funcionamento √© de certa forma semelhante √†s fun√ß√µes, 
+com a diferen√ßa que as macros utilizam como estruturas de dados, o pr√≥prio c√≥digo.
+Desta forma, as macros atenuam a linha entre tempo de compila√ß√£o e execu√ß√£o, visto
+que durante a expans√£o do c√≥digo da macro, toda a linguagem est√° √† disposi√ß√£o.
 
-Aplicando o conceito na p·gina a ser feita, deseja-se que elementos em comum sejam
-preenchidos automaticamente pela linguagem, na expans„o do cÛdigo. Um exemplo È o 
-cabeÁalho da p·gina HTML, com o DOCTYPE.
+Aplicando o conceito na p√°gina a ser feita, deseja-se que elementos em comum sejam
+preenchidos automaticamente pela linguagem, na expans√£o do c√≥digo. Um exemplo √© o 
+cabe√ßalho da p√°gina HTML, com o DOCTYPE.
 
-Uma p·gina padr„o seria, portanto, definida da seguinte forma:
+Uma p√°gina padr√£o seria, portanto, definida da seguinte forma:
 
 #+begin_example lisp
   (standard-page (:title "Retro Games")
@@ -269,7 +269,7 @@ Uma p·gina padr„o seria, portanto, definida da seguinte forma:
 		 (:p "We'll write the code later..."))
 #+end_example 
 
-Logo, percebe-se que a macro de geraÁ„o do cÛdigo envolve basicamente o CL-WHO, da forma
+Logo, percebe-se que a macro de gera√ß√£o do c√≥digo envolve basicamente o CL-WHO, da forma
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -296,11 +296,11 @@ Logo, percebe-se que a macro de geraÁ„o do cÛdigo envolve basicamente o CL-WHO, 
 #+RESULTS:
 : STANDARD-PAGE
 
-O backquote representa uma lista no qual seus termos n„o s„o avaliados,
-com exceÁ„o daqueles precedidos por vÌrgula. O ,@ n„o sÛ avalia o termo, como tambÈm
-desembrulha um nÌvel de lista.
+O backquote representa uma lista no qual seus termos n√£o s√£o avaliados,
+com exce√ß√£o daqueles precedidos por v√≠rgula. O ,@ n√£o s√≥ avalia o termo, como tamb√©m
+desembrulha um n√≠vel de lista.
 
-… possÌvel verificar a expans„o gerada pela macro utilizando o recurso
+√â poss√≠vel verificar a expans√£o gerada pela macro utilizando o recurso
 macro-expansion1, da forma:
 
 #+HEADER: :exports code
@@ -324,18 +324,18 @@ macro-expansion1, da forma:
 
 ** Hunchentoot
 
-Hunchentoot È um web-server completo, escrito em Common Lisp. Para lanÁ·-lo, 
-deve-se instanciar um dos receptores providenciados. Tal objeto È respons·vel por 
-aceitar novas conexıes. Nativamente, Hunchentoot j· possui alguns acceptors definidos.
-Ser· utilizado o /easy-acceptor/. … chamado de f·cil porque j· vem com um mecanismo
-de lanÁamento implementado. Para inciar, deve-se:
+Hunchentoot √© um web-server completo, escrito em Common Lisp. Para lan√ß√°-lo, 
+deve-se instanciar um dos receptores providenciados. Tal objeto √© respons√°vel por 
+aceitar novas conex√µes. Nativamente, Hunchentoot j√° possui alguns acceptors definidos.
+Ser√° utilizado o /easy-acceptor/. √â chamado de f√°cil porque j√° vem com um mecanismo
+de lan√ßamento implementado. Para iniciar, deve-se:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
   (start (make-instance 'easy-acceptor :port 8080))
 #+END_SRC
 
-Colocando dentro de uma funÁ„o, para regular a porta:
+Colocando dentro de uma fun√ß√£o, para regular a porta:
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -343,10 +343,10 @@ Colocando dentro de uma funÁ„o, para regular a porta:
     (start (make-instance 'easy-acceptor :port 8080)))
 #+END_SRC
 
-Ao executar, j· È possÌvel [[http://localhost:8080/][test·-lo]].
+Ao executar, j√° √© poss√≠vel [[http://localhost:8080/][test√°-lo]].
 
-Para publicar alguma p·gina, È necess·rio providenciar um handler para o Hunchentoot.
-Existem v·rias formas de definir um dispatcher. Abaixo um exemplo:
+Para publicar alguma p√°gina, √© necess√°rio providenciar um handler para o Hunchentoot.
+Existem v√°rias formas de definir um dispatcher. Abaixo um exemplo:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -355,9 +355,9 @@ Existem v·rias formas de definir um dispatcher. Abaixo um exemplo:
 	*dispatch-table*)
 #+END_SRC
 
-Desta forma, quando retro-games.htm for acessado, o dispatcher executar· a 
-funÁ„o chamada retro-games, que deve retornar a p·gina em si. Logo, tal
-funÁ„o deve ser implementada.
+Desta forma, quando retro-games.htm for acessado, o dispatcher executar√° a 
+fun√ß√£o chamada retro-games, que deve retornar a p√°gina em si. Logo, tal
+fun√ß√£o deve ser implementada.
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -368,9 +368,9 @@ funÁ„o deve ser implementada.
 #+END_SRC
 
 
-E assim, a p·gina j· est· no ar. Entretanto, percebe-se que este processo
-È repetitivo, podendo ser simplificado por uma macro. O pacote j· possui uma
-forma f·cil de definir os passos acima. Para isso, utiliza-se:
+E assim, a p√°gina j√° est√° no ar. Entretanto, percebe-se que este processo
+√© repetitivo, podendo ser simplificado por uma macro. O pacote j√° possui uma
+forma f√°cil de definir os passos acima. Para isso, utiliza-se:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -380,7 +380,7 @@ forma f·cil de definir os passos acima. Para isso, utiliza-se:
 		   (:p "We'll write the code later...")))
 #+END_SRC
 
-Portanto, a p·gina final ficar· da seguinte forma:
+Portanto, a p√°gina final ficar√° da seguinte forma:
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -403,7 +403,7 @@ Portanto, a p·gina final ficar· da seguinte forma:
 #+RESULTS:
 : RETRO-GAMES
 
-Para adicionar um arquivo est·tico, como uma imagem, ou uma folha de estilos, deve-se
+Para adicionar um arquivo est√°tico, como uma imagem, ou uma folha de estilos, deve-se
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -424,8 +424,8 @@ E para a imagem:
 #+END_SRC
 
 O dolist pega todos os jogos da lista, e os transforma em uma lista ordenada.
-Ao pressionar o Vote!, o usu·rio È redirecionado para a p·gina que contÈm como
-par‚metro, o nome do jogo selecionado. Utilizando o define-easy-handler È trivial
+Ao pressionar o Vote!, o usu√°rio √© redirecionado para a p√°gina que cont√©m como
+par√¢metro, o nome do jogo selecionado. Utilizando o define-easy-handler √© trivial
 o tratamento deste link.
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
@@ -436,7 +436,7 @@ o tratamento deste link.
     (redirect "/retro-games"))
 #+END_SRC
 
-Na p·gina criada, h· um link para uma outra, de cadastro de novos jogos. Tal p·gina È
+Na p√°gina criada, h√° um link para uma outra, de cadastro de novos jogos. Tal p√°gina √©
 criada a seguir:
 
 #+HEADER: :exports code
@@ -450,7 +450,7 @@ criada a seguir:
 	     (:p (:input :type "submit" :value "Add" :class "btn")))))
 #+END_SRC
 
-Tal p·gina envia as informaÁıes para game-added, escrita de forma semelhante:
+Tal p√°gina envia as informa√ß√µes para game-added, escrita de forma semelhante:
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -460,16 +460,16 @@ Tal p·gina envia as informaÁıes para game-added, escrita de forma semelhante:
     (redirect "/retro-games"))
 #+END_SRC
 
-Com tal funÁ„o, o jogo È adicionado ao banco de dados, caso seja v·lido. Em sequÍncia 
-uma validaÁ„o do lado do usu·rio ser· feita.
+Com tal fun√ß√£o, o jogo √© adicionado ao banco de dados, caso seja v√°lido. Em sequ√™ncia 
+uma valida√ß√£o do lado do usu√°rio ser√° feita.
 
 * Expressing JavaScript in Lisp
 ** Lisp para o navegador
 
-Em game-added, algumas funÁıes validavam a entrada do usu·rio, mas È recomendado 
-que tal validaÁ„o seja feita antes do envio. … possÌvel que isto seja feito em
-Common Lisp, atravÈs do pacote Parenscript. Este compila cÛdigo Lisp em JavaSCript.
-Desta forma, uma funÁ„o de validaÁ„o seria da forma:
+Em game-added, algumas fun√ß√µes validavam a entrada do usu√°rio, mas √© recomendado 
+que tal valida√ß√£o seja feita antes do envio. √â poss√≠vel que isto seja feito em
+Common Lisp, atrav√©s do pacote Parenscript. Este compila c√≥digo Lisp em JavaScript.
+Desta forma, uma fun√ß√£o de valida√ß√£o seria da forma:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -481,14 +481,14 @@ Desta forma, uma funÁ„o de validaÁ„o seria da forma:
       (alert "Please enter a name.")))
 #+END_SRC
 
-Devido ‡s diferenÁas de escrita entre Lisp e JavaScript, algumas macros devem ser utilizadas.
-A primeira, @, faz com que o cÛdigo seja escrito como addForm.name.value. A
-segunda, chain, compila para evt.preventDefault(). AlÈm disso, convenÁıes de nome e
-coment·rios s„o tambÈm convertidas para o padr„o JS. Infelizmente, devido
-‡ natureza do JS, v·rios efeitos colaterais s„o encontrados.
+Devido √†s diferen√ßas de escrita entre Lisp e JavaScript, algumas macros devem ser utilizadas.
+A primeira, @, faz com que o c√≥digo seja escrito como addForm.name.value. A
+segunda, chain, compila para evt.preventDefault(). Al√©m disso, conven√ß√µes de nome e
+coment√°rios s√£o tamb√©m convertidas para o padr√£o JS. Infelizmente, devido
+√† natureza do JS, v√°rios efeitos colaterais s√£o encontrados.
 
-Tal cÛdigo ser· suficiente para a funcionalidade desejada. Portanto, È necess·rio
-apenas a adiÁ„o do tratador de eventos do JavaScript.
+Tal c√≥digo ser√° suficiente para a funcionalidade desejada. Portanto, √© necess√°rio
+apenas a adi√ß√£o do tratador de eventos do JavaScript.
 
 ** On event handlers
 
@@ -503,8 +503,8 @@ apenas a adiÁ„o do tratador de eventos do JavaScript.
 
 ** Integrando a DSL ao sistema
 
-O recomendado È que a macro standard-page possua a funcionalidade de 
-criar p·ginas com script. Ent„o, a mesma deve ser redefinida para abordar tal recurso.
+O recomendado √© que a macro standard-page possua a funcionalidade de 
+criar p√°ginas com script. Ent√£o, a mesma deve ser redefinida para abordar tal recurso.
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -534,8 +534,8 @@ criar p·ginas com script. Ent„o, a mesma deve ser redefinida para abordar tal re
 #+RESULTS:
 : STANDARD-PAGE
 
-Assim, esta macro aceita um par‚metro chave adicional, script. 
-A p·gina new-game, refeita adicionando o script È da seguinte forma:
+Assim, esta macro aceita um par√¢metro chave adicional, script. 
+A p√°gina new-game, refeita adicionando o script √© da seguinte forma:
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -560,56 +560,56 @@ A p·gina new-game, refeita adicionando o script È da seguinte forma:
 
 ** Em busca de robustez
 
-Embora seja uma boa pr·tica separar o cÛdigo JavaScript do Html, em Lisp esta 
-tÈcnica se torna um problema menor, j· que toda a p·gina È escrita em Lisp.
+Embora seja uma boa pr√°tica separar o c√≥digo JavaScript do Html, em Lisp esta 
+t√©cnica se torna um problema menor, j√° que toda a p√°gina √© escrita em Lisp.
 
-Uma problem·tica do desenvolvimento web s„o as especificaÁıes de cada navegador.
-Uma forma de solucionar tal problema È utilizar alguma biblioteca de terceiros,
-que faÁa tal distinÁ„o (exemplo jQuery). Bibliotecas do tipo adicionam robustez
-ao sistema, visto que passam a ser compatÌveis com virtualmente todos os browsers
-disponÌveis.
+Uma problem√°tica do desenvolvimento web s√£o as especifica√ß√µes de cada navegador.
+Uma forma de solucionar tal problema √© utilizar alguma biblioteca de terceiros,
+que fa√ßa tal distin√ß√£o (exemplo jQuery). Bibliotecas do tipo adicionam robustez
+ao sistema, visto que passam a ser compat√≠veis com virtualmente todos os browsers
+dispon√≠veis.
 
-Com Parenscript, esta integraÁ„o È feita de forma trivial. N„o apenas isto, 
-mas ainda È possÌvel desenvolver as prÛprias macros e funÁıes em cima 
+Com Parenscript, esta integra√ß√£o √© feita de forma trivial. N√£o apenas isto, 
+mas ainda √© poss√≠vel desenvolver as pr√≥prias macros e fun√ß√µes em cima 
 deste recurso, expandindo ainda mais a linguagem.
 
 ** A vantagem do Lisp
 
-Sendo simples (como nesse caso), ou n„o, o cÛdigo em JavaScript, ainda È preferÌvel
-que tudo seja escrito em Lisp. Alguns fatores influenciam essa decis„o. S„o eles:
-- Regularidade no cÛdigo, mantendo uma representaÁ„o uniforme.
-- Possibilidade de abstraÁ„o, ganhando acesso a macros e todos os recursos da linguagem,
+Sendo simples (como nesse caso), ou n√£o, o c√≥digo em JavaScript, ainda √© prefer√≠vel
+que tudo seja escrito em Lisp. Alguns fatores influenciam essa decis√£o. S√£o eles:
+- Regularidade no c√≥digo, mantendo uma representa√ß√£o uniforme.
+- Possibilidade de abstra√ß√£o, ganhando acesso a macros e todos os recursos da linguagem,
 tanto no lado do servidor, quanto do cliente.
-- O cÛdigo em Parenscript roda t„o bem no REPL quanto no browser
-- MantÈm o fluxo de trabalho, visto que n„o h· trocas de contexto
-AlÈm disso, caso o usu·rio n„o deseje colocar o cÛdigo do script junto com a definiÁ„o
-da p·gina, È possÌvel abstrair normalmente, colocando inclusive em outro arquivo, 
-as funÁıes do lado do usu·rio, por exemplo.
+- O c√≥digo em Parenscript roda t√£o bem no REPL quanto no browser
+- Mant√©m o fluxo de trabalho, visto que n√£o h√° trocas de contexto
+Al√©m disso, caso o usu√°rio n√£o deseje colocar o c√≥digo do script junto com a defini√ß√£o
+da p√°gina, √© poss√≠vel abstrair normalmente, colocando inclusive em outro arquivo, 
+as fun√ß√µes do lado do usu√°rio, por exemplo.
 
 * Persistent Objects
 
-** IntroduÁ„o ‡ persistÍncia de dados
+** Introdu√ß√£o √† persist√™ncia de dados
 
-Inicialmente, o problema de persistÍncia foi ignorado. Entretanto, È altamente
+Inicialmente, o problema de persist√™ncia foi ignorado. Entretanto, √© altamente
 recomendado que alguma forma de armazenamento dos dados seja considerada. 
-Sabendo que o Hunchentoot È multi-threaded e os requisitos de p·ginas podem
-vir de qualquer n˙cleo, um banco de dados È a soluÁ„o mais adequada.
+Sabendo que o Hunchentoot √© multi-threaded e os requisitos de p√°ginas podem
+vir de qualquer n√∫cleo, um banco de dados √© a solu√ß√£o mais adequada.
 
 ** MongoDB como backend
 
-Quando se traata de informaÁıes persistentes, alternativas n„o faltam. Quando
-n„o se sabe exatamente o que se ir· construir, o recomendado È comeÁar com uma
-estratÈgia que pode ser facilmente modificada futuramente. Uma boa soluÁ„o È 
-um banco de dados n„o relacional, exemplo Mongo. Este È um BD NoSQL construido 
-sobre a ideia de representar conteudo como documento. … a escolha deste trabalho
-pois È f·cil de configurar e possui um ambiente de desenvolvimento bem amig·vel. 
+Quando se trata de informa√ß√µes persistentes, alternativas n√£o faltam. Quando
+n√£o se sabe exatamente o que se ir√° construir, o recomendado √© come√ßar com uma
+estrat√©gia que pode ser facilmente modificada futuramente. Uma boa solu√ß√£o √© 
+um banco de dados n√£o relacional, exemplo Mongo. Este √© um BD NoSQL constru√≠do 
+sobre a ideia de representar conte√∫do como documento. √â a escolha deste trabalho
+pois √© f√°cil de configurar e possui um ambiente de desenvolvimento bem amig√°vel. 
 MongoDB pode ser instalado por [[https://www.mongodb.com/download-center/community][aqui]].
 
 ** Do Lisp para o Mongo
 
-ApÛs a instalaÁ„o, È necess·rio iniciar o processo do MongoDB, executando o mongod.
-mongod ser· o ponto principal de interaÁ„o. Todas as operaÁıes ser„o enviadas para ele.
-A integraÁ„o com o Lisp ser· feita atravÈs do cl-mongo, carregado junto com o sistema,
+Ap√≥s a instala√ß√£o, √© necess√°rio iniciar o processo do MongoDB, executando o mongod.
+mongod ser√° o ponto principal de intera√ß√£o. Todas as opera√ß√µes ser√£o enviadas para ele.
+A integra√ß√£o com o Lisp ser√° feita atrav√©s do cl-mongo, carregado junto com o sistema,
 ao ser especificado no arquivo asd.
 
 Para conectar a um banco, utiliza-se:
@@ -619,22 +619,22 @@ Para conectar a um banco, utiliza-se:
   (cl-mongo:db.use "games")
 #+END_SRC
 
-MongoDB armazena todos os documentos em uma coleÁ„o. No caso deste trabalho,
-a coleÁ„o ser· chamada game, e ser· definida da seguinte forma:
+MongoDB armazena todos os documentos em uma cole√ß√£o. No caso deste trabalho,
+a cole√ß√£o ser√° chamada game, e ser√° definida da seguinte forma:
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
   (defparameter *game-collection* "game")
 #+END_SRC
 
-Desta forma, È possÌvel se referir ‡ coleÁ„o utilizando o sÌmbolo *game-collection*
-no cÛdigo.
+Desta forma, √© poss√≠vel se referir √† cole√ß√£o utilizando o s√≠mbolo *game-collection*
+no c√≥digo.
 
-** Migrando para a persistÍncia
+** Migrando para a persist√™ncia
 
-J· que inicialmente um esforÁo adicional foi destinado a encapsular o acesso ao backend,
-as recompensas desta estratÈgia ser„o colhidas aqui. As ˙nicas alteraÁıes necess·rias
-ser„o modificar o acesso de *games* usando a API do mongo. Desta forma:
+J√° que inicialmente um esfor√ßo adicional foi destinado a encapsular o acesso ao backend,
+as recompensas desta estrat√©gia ser√£o colhidas aqui. As √∫nicas altera√ß√µes necess√°rias
+ser√£o modificar o acesso de *games* usando a API do mongo. Desta forma:
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -647,10 +647,10 @@ ser„o modificar o acesso de *games* usando a API do mongo. Desta forma:
     (game-from-name name))
 #+END_SRC
 
-A nova implementaÁ„o de game-from-name procura em *game-collection* utilizando db.find,
-que se traduz em um comando findOne, do Mongo. O resultado È garantido de ser unit·rio,
+A nova implementa√ß√£o de game-from-name procura em *game-collection* utilizando db.find,
+que se traduz em um comando findOne, do Mongo. O resultado √© garantido de ser unit√°rio,
 caso encontrado. Portanto, resta apenas converter o documento para um jogo.
-Para isso, È recomendado alterar a classe game, da seguinte forma:
+Para isso, √© recomendado alterar a classe game, da seguinte forma:
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -658,7 +658,7 @@ Para isso, È recomendado alterar a classe game, da seguinte forma:
     ((name :reader name
 	   :initarg :name)
      (votes :accessor votes
-	    :initarg :votes ;necess·rio quando leitura feita por BD
+	    :initarg :votes ;necess√°rio quando leitura feita por BD
 	    :initform 0)))
 
   (defun doc->game (game-doc)
@@ -668,10 +668,10 @@ Para isso, È recomendado alterar a classe game, da seguinte forma:
 #+END_SRC
 
 O get-element, em doc->game, permite que os valores dos campos do documento recuperado
-sejam acessados. Como a funÁ„o game-from-name continua retornando nil caso
-n„o seja encontrado, game-stored? pode continuar da mesma maneira.
-Portanto, restam as alteraÁıes em add-game. J· n„o È mais necess·rio manter
-as inst‚ncias dos objetos na memÛria, j· que o banco de dados faz isso.
+sejam acessados. Como a fun√ß√£o game-from-name continua retornando nil caso
+n√£o seja encontrado, game-stored? pode continuar da mesma maneira.
+Portanto, restam as altera√ß√µes em add-game. J√° n√£o √© mais necess√°rio manter
+as inst√¢ncias dos objetos na mem√≥ria, j√° que o banco de dados faz isso.
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -680,9 +680,9 @@ as inst‚ncias dos objetos na memÛria, j· que o banco de dados faz isso.
       (db.insert *game-collection* (game->doc game))))
 #+END_SRC
 
-O passo extra de instanciaÁ„o n„o È estritamente necess·rio, mas È recomendado
-para que seja mantido o nÌvel de abstraÁ„o entre banco e funcionalidade. Logo, 
-uma funÁ„o de convers„o game->doc È necess·ria. 
+O passo extra de instancia√ß√£o n√£o √© estritamente necess√°rio, mas √© recomendado
+para que seja mantido o n√≠vel de abstra√ß√£o entre banco e funcionalidade. Logo, 
+uma fun√ß√£o de convers√£o game->doc √© necess√°ria. 
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -691,8 +691,8 @@ uma funÁ„o de convers„o game->doc È necess·ria.
        ($ "votes" (votes game))))
 #+END_SRC
 
-O sÌmbolo $ È uma macro fornecida pelo cl-mongo. A macro permite a criaÁ„o
-de um documento, e adiciona os campos name e votes a ele. Sem a macro, tal cÛdigo
+O s√≠mbolo $ √© uma macro fornecida pelo cl-mongo. A macro permite a cria√ß√£o
+de um documento, e adiciona os campos name e votes a ele. Sem a macro, tal c√≥digo
 poderia ser escrito da seguinte forma:
 
 #+HEADER: :exports code
@@ -701,26 +701,26 @@ poderia ser escrito da seguinte forma:
     (let ((game-doc (make-document)))
       (add-element "name" (name game) game-doc)
       (add-element "votes" (votes game) game-doc)
-      game-docc))
+      game-doc))
 #+END_SRC
 
-Tal estratÈgia È maior, utiliza um estilo imperativo, e n„o aproveita os recursos
+Tal estrat√©gia √© maior, utiliza um estilo imperativo, e n√£o aproveita os recursos
 do Lisp.
 
-*** Notas em concorrÍncia
+*** Notas em concorr√™ncia
 
-A vari·vel criada inicialmente, games, encontraria problemas ao ser acessada de 
-v·rios n˙cleos, ao mesmo tempo. Utilizando um banco de dados, este problema È
+A vari√°vel criada inicialmente, games, encontraria problemas ao ser acessada de 
+v√°rios n√∫cleos, ao mesmo tempo. Utilizando um banco de dados, este problema √©
 solucionado. 
-Entretanto, ainda È possÌvel que dois usu·rios tentem adicionar o mesmo jogo 
-simultaneamente. Mesmo com o sistema de concorrÍncia do Mongo, de v·rios leitores,
+Entretanto, ainda √© poss√≠vel que dois usu√°rios tentem adicionar o mesmo jogo 
+simultaneamente. Mesmo com o sistema de concorr√™ncia do Mongo, de v√°rios leitores,
 apenas um escritor, este problema ainda poderia aparecer.
 
 ** Evitando duplicatas com Constraints
 
-Inicialmente, para evitar qualquer tipo de duplicata, faz-se necess·rio especificar
-o que È um jogo ˙nico. No caso atual, somente o nome do jogo est· como chave. Para
-garantir que o mongo reforce esta regra, È necess·rio especificar um Ìndice ˙nico.
+Inicialmente, para evitar qualquer tipo de duplicata, faz-se necess√°rio especificar
+o que √© um jogo √∫nico. No caso atual, somente o nome do jogo est√° como chave. Para
+garantir que o mongo reforce esta regra, √© necess√°rio especificar um √≠ndice √∫nico.
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -737,32 +737,32 @@ Executando-a da seguinte forma:
   (unique-index-on "name")
 #+END_SRC
 
-Desta forma, a constraint ser· criada, verificando sempre que cada nome receba
-um Ìndice ˙nico.
+Desta forma, a constraint ser√° criada, verificando sempre que cada nome receba
+um √≠ndice √∫nico.
 
 ** CLOS: Observers for free
 
-Inicialmente, vote-for era respons·vel por incrementar o n˙mero de votos.
-PorÈm, tal funÁ„o, sozinha, n„o conseque mais cumprir seu trabalho, j· que agora
-passa a ser necess·rio a propagaÁ„o dos valores para o mongo. Entretanto, caso
-tal funcionalidade seja inserida em vote-for, a funÁ„o passa a ter mais de um 
-trabalho, o que n„o È uma boa estratÈgia funcional. 
-Utilizando CLOS, fica trivial criar uma funÁ„o que È chamada sempre que vote-for
-for invocada. Aqui, o CLOS apresenta uma soluÁ„o elegante, com o conceito de
-combinaÁ„o de mÈtodos. 
-Embora seja possÌvel customizar essa combinaÁ„o, a forma padr„o da mesma
-j· È suficiente para solucionar o problema. Funciona da seguinte forma:
+Inicialmente, vote-for era respons√°vel por incrementar o n√∫mero de votos.
+Por√©m, tal fun√ß√£o, sozinha, n√£o consegue mais cumprir seu trabalho, j√° que agora
+passa a ser necess√°rio a propaga√ß√£o dos valores para o mongo. Entretanto, caso
+tal funcionalidade seja inserida em vote-for, a fun√ß√£o passa a ter mais de um 
+trabalho, o que n√£o √© uma boa estrat√©gia funcional. 
+Utilizando CLOS, fica trivial criar uma fun√ß√£o que √© chamada sempre que vote-for
+for invocada. Aqui, o CLOS apresenta uma solu√ß√£o elegante, com o conceito de
+combina√ß√£o de m√©todos. 
+Embora seja poss√≠vel customizar essa combina√ß√£o, a forma padr√£o da mesma
+j√° √© suficiente para solucionar o problema. Funciona da seguinte forma:
 
-1. O programador especifica um mÈtodo prim·rio, especializado para determinada classe
-2. Antes que o mÈtodo prim·rio seja invocado, CLOS chama um possÌvel mÈtodo :before
-3. De forma simÈtrica, apÛs a execuÁ„o de um mÈtodo, CLOS invoca os mÈtodos :after
-4. Em adiÁ„o, CLOS permite a especificaÁ„o de mÈtodos :around. N„o ser„o utilizados,
-nesse caso, mas basicamente eles s„o executados antes de qualquer outro mÈtodo, 
-e especificam quando o prÛximo mÈtodo ser· chamado. O prÛximo mÈtodo pode ser qualquer 
+1. O programador especifica um m√©todo prim√°rio, especializado para determinada classe
+2. Antes que o m√©todo prim√°rio seja invocado, CLOS chama um poss√≠vel m√©todo :before
+3. De forma sim√©trica, ap√≥s a execu√ß√£o de um m√©todo, CLOS invoca os m√©todos :after
+4. Em adi√ß√£o, CLOS permite a especifica√ß√£o de m√©todos :around. N√£o ser√£o utilizados,
+nesse caso, mas basicamente eles s√£o executados antes de qualquer outro m√©todo, 
+e especificam quando o pr√≥ximo m√©todo ser√° chamado. O pr√≥ximo m√©todo pode ser qualquer 
 um entre before, after ou primary
 
-Com isso, v·rias possibilidades de ortogonalidade s„o abertas, conceitos de
-log e trace se fazem possÌveis de forma trivial.
+Com isso, v√°rias possibilidades de ortogonalidade s√£o abertas, conceitos de
+log e trace se fazem poss√≠veis de forma trivial.
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
 #+BEGIN_SRC lisp
@@ -776,16 +776,16 @@ log e trace se fazem possÌveis de forma trivial.
 		 game-doc)))
 #+END_SRC
 
-Como desejamos fazer o update de um jogo j· alterado, utiliza-se um mÈtodo
-after. Finalmente, vale notar que cÛdico em Common Lisp n„o necessariamente
-lembra aqueles de OrientaÁ„o a Objetos puro. Entretanto, este exemplo
-mostra uma vers„o din‚mica do design pattern Observer. O exemplo tambÈm engloba
-o princÌpio de encapsulamento, ao extender o comportamento de uma classe
-sem modificar cÛdigo j· existente.
+Como desejamos fazer o update de um jogo j√° alterado, utiliza-se um m√©todo
+after. Finalmente, vale notar que c√≥digo em Common Lisp n√£o necessariamente
+lembra aqueles de Orienta√ß√£o a Objetos puro. Entretanto, este exemplo
+mostra uma vers√£o din√¢mica do design pattern Observer. O exemplo tamb√©m engloba
+o princ√≠pio de encapsulamento, ao estender o comportamento de uma classe
+sem modificar c√≥digo j√° existente.
 
 ** Sorting games through MongoDB
 
-Um ˙ltimo ajuste È necess·rio, antes de lanÁar o recurso de backend: a ordenaÁ„o
+Um √∫ltimo ajuste √© necess√°rio, antes de lan√ßar o recurso de backend: a ordena√ß√£o
 de jogos por popularidade.
 
 #+HEADER: :exports code :tangle "retro-games.lisp"
@@ -798,20 +798,20 @@ de jogos por popularidade.
 				 :asc nil)))))
 #+END_SRC
 
-Novamente, utiliza-se funcionalidades de cl-mongo. db-sort È uma macro
+Novamente, utiliza-se funcionalidades de cl-mongo. db-sort √© uma macro
 que expande para uma query find, ajustada para funcionar como um sort.
-Foi especificado que deseja-se all games, ordenados pelo campo votes, com 
-ascendente nulo, ou seja, de forma descendente. Entretanto, por razıes de 
-eficiÍncia, o mongo n„o retorna o conjunto completo de dados, mas sim
-um cursor sobre o qual È possÌvel iterar e recuperar todos os elementos. 
-Com o iter, È possÌvel recuperar todos os docs itens, convertidos para game, finalmente,
+Foi especificado que se deseja all games, ordenados pelo campo votes, com 
+ascendente nulo, ou seja, de forma descendente. Entretanto, por raz√µes de 
+efici√™ncia, o mongo n√£o retorna o conjunto completo de dados, mas sim
+um cursor sobre o qual √© poss√≠vel iterar e recuperar todos os elementos. 
+Com o iter, √© poss√≠vel recuperar todos os docs itens, convertidos para game, finalmente,
 ao mapear sobre a lista.
 
 ** Remembering the Games
 
-A funÁ„o games completou a migraÁ„o para um sistema persistente. Mas ainda 
-gostarÌamos de manter os jogos adicionados anteriormente. Afinal, os usu·rios n„o 
-deveriam sentir alteraÁıes ao mudar a lÛgica do sistema. Para isso, basta que
+A fun√ß√£o games completou a migra√ß√£o para um sistema persistente. Mas ainda 
+gostar√≠amos de manter os jogos adicionados anteriormente. Afinal, os usu√°rios n√£o 
+deveriam sentir altera√ß√µes ao mudar a l√≥gica do sistema. Para isso, basta que
 os jogos em *games* sejam adicionados ao banco, da seguinte forma:
 
 #+HEADER: :exports code
@@ -822,9 +822,9 @@ os jogos em *games* sejam adicionados ao banco, da seguinte forma:
 	  *games*)
 #+END_SRC
 
-Era possÌvel ter criado uma funÁ„o para tal, mas sabendo que esta operaÁ„o
-ser· realizada apenas uma vez, uma funÁ„o anÙnima È mais adequada. Agora
-È possÌvel settar *games* para nil, e atÈ mesmo removÍ-lo do pacote, da forma:
+Era poss√≠vel ter criado uma fun√ß√£o para tal, mas sabendo que esta opera√ß√£o
+ser√° realizada apenas uma vez, uma fun√ß√£o an√¥nima √© mais adequada. Agora
+√© poss√≠vel settar *games* para nil, e at√© mesmo remov√™-lo do pacote, da forma:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -835,19 +835,19 @@ ser· realizada apenas uma vez, uma funÁ„o anÙnima È mais adequada. Agora
 
 * MapReduce in Lisp
 
-A abordagem tratada È simples. ComeÁa-se com uma vers„o pequena e simples do sistema,
-e incrementa-a iterativamente, atÈ que uma vers„o complexa seja alcanÁada, com
+A abordagem tratada √© simples. Come√ßa-se com uma vers√£o pequena e simples do sistema,
+e incrementa-a iterativamente, at√© que uma vers√£o complexa seja alcan√ßada, com
 as funcionalidades desejadas. Ao escolher bem os pacotes a serem
-utilizados, garante-se que o cÛdigo esteja apto a suportar tais alteraÁıes.
+utilizados, garante-se que o c√≥digo esteja apto a suportar tais altera√ß√µes.
 
-Neste capÌtulo, uma nova funcionalidade È adicionada, para tratar de big data:
+Neste cap√≠tulo, uma nova funcionalidade √© adicionada, para tratar de big data:
 O MapReduce.
 
 ** Pushing work to the server-side
 
-O sistema desenvolvido se encontra em est·gios iniciais de desenvolvimento, sendo
-possÌvel imaginar diversas adiÁıes ao sistema. Uma delas È a categorizaÁ„o dos jogos.
-Extender :retro-games para abranger categorias È trivial:
+O sistema desenvolvido se encontra em est√°gios iniciais de desenvolvimento, sendo
+poss√≠vel imaginar diversas adi√ß√µes ao sistema. Uma delas √© a categoriza√ß√£o dos jogos.
+Estender :retro-games para abranger categorias √© trivial:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -864,7 +864,7 @@ Extender :retro-games para abranger categorias È trivial:
 #+RESULTS:
 : #<STANDARD-CLASS RETRO-GAMES::GAME>
 
-A extens„o do backend tambÈm È similar: 
+A extens√£o do backend tamb√©m √© similar: 
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -882,27 +882,27 @@ A extens„o do backend tambÈm È similar:
 #+RESULTS:
 : ADD-GAME
 
-O cÛdigo acima È suficiente para adicionar o recurso de categorias, de forma
+O c√≥digo acima √© suficiente para adicionar o recurso de categorias, de forma
 persistente. Um novo recurso passa a ser interessante: exibir quantos jogos por
-categoria. Tal funcionalidade permitiria a visualizaÁ„o do crescimento das categorias.
-Para isso,  tal recurso poderia ser implementado na funÁ„o games. Nela, os jogos
-seriam recuperados, agrupados por categoria, e enfim somados os n˙meros de jogos
-em cada categorias. … ineficiente. Melhor deixar para o banco. Para isso, um algoritmo
-de MapReduce È o recomendado.
+categoria. Tal funcionalidade permitiria a visualiza√ß√£o do crescimento das categorias.
+Para isso,  tal recurso poderia ser implementado na fun√ß√£o games. Nela, os jogos
+seriam recuperados, agrupados por categoria, e enfim somados os n√∫meros de jogos
+em cada categorias. √â ineficiente. Melhor deixar para o banco. Para isso, um algoritmo
+de MapReduce √© o recomendado.
 
 ** The MapReduce algorithm in MongoDB
 
-MongoDB abre v·rias possibilidades, todas acessÌveis pelo REPL do Lisp. 
-J· que o MapReduce È um algoritmo fundamental para lidar com grande volume de dados,
-o mesmo j· È oferecido pelo Mongo. Tudo que È necess·rio fazer È apresentar as funÁıes
-de map e de reduce. Mongo utiliza como linguagem de execuÁ„o o JavaScript.
-Boas notÌcias para nÛs. J· sabemos escrever JS a partir do Lisp, com o Parenscript.
+MongoDB abre v√°rias possibilidades, todas acess√≠veis pelo REPL do Lisp. 
+J√° que o MapReduce √© um algoritmo fundamental para lidar com grande volume de dados,
+o mesmo j√° √© oferecido pelo Mongo. Tudo que √© necess√°rio fazer √© apresentar as fun√ß√µes
+de map e de reduce. Mongo utiliza como linguagem de execu√ß√£o o JavaScript.
+Boas not√≠cias para n√≥s. J√° sabemos escrever JS a partir do Lisp, com o Parenscript.
 
 ** Specifying the steps with Parenscript
 
-ComeÁando pela funÁ„o map. De acordo com a documentaÁ„o do Mongo, a funÁ„o deve retornar
-uma tupla de chave e valor. J· que queremos apenas a categoria de cada jogo, 
-a funÁ„o pode retornar o nome da categoria e o valor constante 1, da forma:
+Come√ßando pela fun√ß√£o map. De acordo com a documenta√ß√£o do Mongo, a fun√ß√£o deve retornar
+uma tupla de chave e valor. J√° que queremos apenas a categoria de cada jogo, 
+a fun√ß√£o pode retornar o nome da categoria e o valor constante 1, da forma:
 
 #+HEADER: :exports code
 #+BEGIN_SRC lisp
@@ -913,14 +913,14 @@ a funÁ„o pode retornar o nome da categoria e o valor constante 1, da forma:
 #+RESULTS:
 : MAP_CATEGORY
 
-Sendo defjs um utilit·rio, providenciado por cl-mongo, que nos permite 
-definir funÁıes JavaScript no lado do cliente. O cÛdigo real È expresso em
-Parenscript. defjs apenas garante que a funÁ„o È acessÌvel nas futuras interaÁıes com o mongo.
-emit È um gerador JavaScript que produz um par de chave e valor, quando invocado
+Sendo defjs um utilit√°rio, providenciado por cl-mongo, que nos permite 
+definir fun√ß√µes JavaScript no lado do cliente. O c√≥digo real √© expresso em
+Parenscript. defjs apenas garante que a fun√ß√£o √© acess√≠vel nas futuras intera√ß√µes com o mongo.
+emit √© um gerador JavaScript que produz um par de chave e valor, quando invocado
 no documento game.
 
-A fase de reduÁ„o ir· coletar os dados gerados pelo map. A funÁ„o reduce ser· invocada
-uma vez a cada sequencia agregada produzida pelo passo anterior. Agora, 
+A fase de redu√ß√£o ir√° coletar os dados gerados pelo map. A fun√ß√£o reduce ser√° invocada
+uma vez a cada sequ√™ncia agregada produzida pelo passo anterior. Agora, 
 reduce apenas necessita de somar os votos.
 
 #+HEADER: :exports code
@@ -932,10 +932,10 @@ reduce apenas necessita de somar os votos.
 #+RESULTS:
 : SUM_GAMES
 
-A macro @ j· foi visitada. Ela È utilizada para acessar as propriedades de um objeto.
-Nesse caso, deseja-se invocar o mÈtodo sum do mÛdulo Array. Ent„o, 
-tal valor È colocado entre dois parÍnteses, para que se transforme em uma
-chamada de funÁ„o. Este cÛdigo se espande para:
+A macro @ j√° foi visitada. Ela √© utilizada para acessar as propriedades de um objeto.
+Nesse caso, deseja-se invocar o m√©todo sum do m√≥dulo Array. Ent√£o, 
+tal valor √© colocado entre dois par√™nteses, para que se transforme em uma
+chamada de fun√ß√£o. Este c√≥digo se expande para:
 
 #+BEGIN_EXAMPLE js
   (function (c, vals) {
@@ -943,21 +943,21 @@ chamada de funÁ„o. Este cÛdigo se espande para:
   });
 #+END_EXAMPLE
 
-Definidos os dois passos do MapReduce, estamos prontos para execut·-los.
+Definidos os dois passos do MapReduce, estamos prontos para execut√°-los.
 
 ** Executing MapReduce from the REPL
 
-Recapitulando, o map_category È invocado em todos os documentos e os categoriza
+Recapitulando, o map_category √© invocado em todos os documentos e os categoriza
 de um em um, baseado no valor do campo category. O MapReduce agrupa as categorias
 iguais e finalmente, o reduce produz os resultados desejados ao somar todos
 os membros de um mesmo grupo.
 
-Finalmente, basta apenas invocar o algoritmo com as funÁıes. 
-O cl-mongo fornece a macro $map-reduce, que recebe trÍs argumentos:
+Finalmente, basta apenas invocar o algoritmo com as fun√ß√µes. 
+O cl-mongo fornece a macro $map-reduce, que recebe tr√™s argumentos:
 
-1. Uma coleÁ„o na qual ele opera (game)
-2. Uma funÁ„o map (map_category)
-3. Uma funÁ„o reduce (sum_games)
+1. Uma cole√ß√£o na qual ele opera (game)
+2. Uma fun√ß√£o map (map_category)
+3. Uma fun√ß√£o reduce (sum_games)
 
 Encapsulando em um defun:
 
@@ -967,8 +967,8 @@ Encapsulando em um defun:
     (pp (mr.p ($map-reduce "game" map_category sum_games))))
 #+END_SRC
 
-Infelizmente, um erro est· ocorrendo, referente ‡ conex„o mongod <-> cl-mongo. 
-Tal erro È facilmente corrigido, trocando as funÁıes dentro do map-reduce
+Infelizmente, um erro est√° ocorrendo, referente √† conex√£o mongod <-> cl-mongo. 
+Tal erro √© facilmente corrigido, trocando as fun√ß√µes dentro do map-reduce
 para JS puro, da forma:
 
 #+HEADER: :exports code
@@ -983,7 +983,7 @@ para JS puro, da forma:
 : SUM-BY-CATEGORY
 
 
-Desta forma, È possÌvel testar a funcionalidade no REPL:
+Desta forma, √© poss√≠vel testar a funcionalidade no REPL:
 
 #+BEGIN_SRC lisp
   (add-game "Tetris" "Classic")
@@ -994,18 +994,19 @@ Desta forma, È possÌvel testar a funcionalidade no REPL:
   (sum-by-category)
 #+END_SRC
 
-Esta funÁ„o possui trÍs partes principais. Inicialmente, o mongo retorna
+Esta fun√ß√£o possui tr√™s partes principais. Inicialmente, o mongo retorna
 um documento especificando onde encontrar os resultados. Depois mr.p encontra
-esses resultados e pp imprime de forma legÌvel no REPL.
+esses resultados e pp imprime de forma leg√≠vel no REPL.
 
-Executar um MapReduce no MongoDB, utilizando funÁıes em JavaScript mostram qu„o
-poderosa È linguagem, que consegue se transformar no que o usu·rio desejar.
+Executar um MapReduce no MongoDB, utilizando fun√ß√µes em JavaScript mostram qu√£o
+poderosa √© linguagem, que consegue se transformar no que o usu√°rio desejar.
 
 * Endgame
 
 ** Final considerations
 
-Tudo que foi tratado apenas mostra a superfÌcie do poder do Lisp. Devido
-‡ natureza din‚mica e interativa do Lisp, È a escolha perfeita para protÛtipos.
-E devido ‡ facilidade de evoluÁ„o do Lisp, rapidamente o protÛtipo pode se
-tornar um produto completo. 
+Tudo que foi tratado apenas mostra a superf√≠cie do poder do Lisp. Devido
+√† natureza din√¢mica e interativa do Lisp, √© a escolha perfeita para prot√≥tipos.
+E devido √† facilidade de evolu√ß√£o do Lisp, rapidamente o prot√≥tipo pode se
+tornar um produto completo.
+
